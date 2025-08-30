@@ -47,32 +47,33 @@
 
   <script>
     // 获取库存并显示
+    // 获取库存并显示
     async function getInventory() {
-      const responseA = await fetch('/inventory?productId=A');
+      const responseA = await fetch('https://inventoryend.seaocean.sbs/inventory?productId=A');
       const dataA = await responseA.json();
       document.getElementById('productAStock').textContent = dataA.inventory;
-
-      const responseB = await fetch('/inventory?productId=B');
+  
+      const responseB = await fetch('https://inventoryend.seaocean.sbs/inventory?productId=B');
       const dataB = await responseB.json();
       document.getElementById('productBStock').textContent = dataB.inventory;
     }
-
+  
     // 提交订单
     document.getElementById('orderButton').addEventListener('click', async () => {
-      const productId = 'A';  // 举例，选择商品A
+      const productId = 'A';  // 假设用户选择了商品A
       const quantity = 1;  // 假设每次提交一个订单
-
-      const response = await fetch('/order', {
+  
+      const response = await fetch('https://inventoryend.seaocean.sbs/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, quantity })
       });
-
+  
       const result = await response.text();
       alert(result);
-      getInventory();  // 重新获取库存
+      getInventory();  // 重新获取库存并更新前端显示
     });
-
+  
     // 初始化时获取库存
     getInventory();
   </script>
