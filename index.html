@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>商品库存管理</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .inventory {
+      margin: 20px 0;
+    }
+    .inventory div {
+      padding: 8px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>商品库存管理</h1>
+    <div class="inventory">
+      <div>商品A - 库存: <span id="productAStock">0</span></div>
+      <div>商品B - 库存: <span id="productBStock">0</span></div>
+    </div>
+    <div>
+      <button id="orderButton">提交订单</button>
+    </div>
+  </div>
+
+  <script>
+    // 获取库存并显示
+    async function getInventory() {
+      const responseA = await fetch('/inventory?productId=A');
+      const dataA = await responseA.json();
+      document.getElementById('productAStock').textContent = dataA.inventory;
+
+      const responseB = await fetch('/inventory?productId=B');
+      const dataB = await responseB.json();
+      document.getElementById('productBStock').textContent = dataB.inventory;
+    }
+
+    // 提交订单
+    document.getElementById('orderButton').addEventListener('click', async () => {
+      const productId = 'A';  // 举例，选择商品A
+      const quantity = 1;  // 假设每次提交一个订单
+
+      const response = await fetch('/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, quantity })
+      });
+
+      const result = await response.text();
+      alert(result);
+      getInventory();  // 重新获取库存
+    });
+
+    // 初始化时获取库存
+    getInventory();
+  </script>
+</body>
+</html>
